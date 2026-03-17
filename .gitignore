@@ -1,22 +1,12 @@
-# Python
-__pycache__/
-*.py[cod]
-*.so
-.venv/
-venv/
-env/
+# Model checkpoints (large files)
+checkpoints/*.pt
 
-# IDE / OS
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
-
-# Runtime-generated artifacts
+# Logs
+logs/
 *.log
-*.tmp
 
-# CARLA / training outputs (uncomment if you want a lean git repo)
-# checkpoints/*.pt
-# logs/*.txt
-# results/**/*.csv
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.env
