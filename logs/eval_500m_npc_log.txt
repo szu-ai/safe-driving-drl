@@ -1,0 +1,23 @@
+[CFG] route_target_length overridden to 500 m (soft window 470–540 m)
+Mode: eval
+Device: cpu
+GlobalRoutePlanner available: True
+Python: 3.10.19
+Source town: Town10HD_Opt | goal=40 | NPC=[8, 20]
+Target town: Town05 | goal=auto | NPC=[8, 15]
+Weather: source=night_rain_fog target=mixed
+Safety shield: False
+beta0 candidates: (0.5, 1.0) | auto-select=True
+Follow ego view: True
+No rendering: False
+Output dir: /home/umb/Desktop/car2/culrt_carla_0915_aligned
+Auto-selected route target length: 500m ± 30m
+Train steps: 500000 | Adapt steps cap: 50000 | Adapt episodes: 100
+Checkpoint: /home/umb/Desktop/car2/culrt_carla_0915_aligned/models/source_agent.pt
+Episodes: 20
+[OK] Loaded checkpoint.
+==========================================================================================
+Evaluating on Town05 | goal=auto | weather=mixed
+[OK] Connected to CARLA | host=localhost port=2200 town=Town05 sync=True dt=0.050s weather=mixed fixed_goal_index=-1
+Resolved target env town: Town05
+[WARN] planner auto-route unavailable from spawn 253 in Town05; using local lane-follow route fallback

@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+env/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Runtime-generated artifacts
+*.log
+*.tmp
+
+# CARLA / training outputs (uncomment if you want a lean git repo)
+# checkpoints/*.pt
+# logs/*.txt
+# results/**/*.csv

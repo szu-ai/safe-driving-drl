@@ -1,0 +1,12 @@
+# Core Python dependencies used by car.py
+numpy
+torch
+# car.py supports either gym or gymnasium
+# Install one of the following in your environment:
+gym
+# gymnasium
+
+# CARLA Python API is required separately for CARLA 0.9.15.
+# In many setups this is provided by the CARLA package or the CARLA egg/wheel.
+# Example (if compatible with your local setup):
+# carla==0.9.15

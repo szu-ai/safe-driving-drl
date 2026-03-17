@@ -1,0 +1,2 @@
+avg_reward,success_rate_pct,avg_DS,avg_IS,avg_min_ttc,avg_intervention_rate,coll_per_km,off_per_km,to_per_km,total_dist_km
+-1.1726,75.0000,70.5012,0.7500,1.0863,0.0622,0.3733,0.0000,1.4934,2.6785
