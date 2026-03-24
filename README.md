@@ -43,15 +43,9 @@ This paper presents a unified reliability-centered driving framework that combin
 
 ## Unified System Model Figure
 
-The unified system model figure used in this work is available here:
+The unified system model figure used in this work is shown below.
 
-- **Framework figure:** [diagrams/unified_framework.pdf](./diagrams/unified_framework.pdf)
-
-### Preview
-
-> GitHub does not render local PDF files inline inside `README.md`.  
-> The figure above is therefore linked directly as a PDF.  
-> For best inline display on GitHub, you may additionally export it as `diagrams/unified_framework.png` later.
+![Unified Framework Figure](./diagrams/unified_framework.png)
 
 This unified framework integrates:
 - ego-centric relational state construction,
@@ -171,16 +165,16 @@ Direct link: [video/3.mp4](./video/3.mp4)
 The repository includes the main analysis figures used to summarize reward behavior, route performance, stability, and uncertainty.
 
 ### Reward Comparison
-- [graphs/reward_comparison.pdf](./graphs/reward_comparison.pdf)
+![Reward Comparison](./graphs/reward_comparison.png)
 
 ### State Route Analysis
-- [graphs/state_route.pdf](./graphs/state_route.pdf)
+![State Route Analysis](./graphs/state_route.png)
 
 ### State Stability Analysis
-- [graphs/state_stability.pdf](./graphs/state_stability.pdf)
+![State Stability Analysis](./graphs/state_stability.png)
 
 ### Uncertainty Metrics
-- [graphs/uncertainty_metrics.pdf](./graphs/uncertainty_metrics.pdf)
+![Uncertainty Metrics](./graphs/uncertainty_metrics.png)
 
 ---
 
@@ -195,14 +189,14 @@ safe-driving-drl/
 │   ├── source_agent_best.pt
 │   └── source_agent.pt
 ├── diagrams/
-│   └── unified_framework.pdf
+│   └── unified_framework.png
 ├── docs/
 │   └── PROJECT_NOTES.md
 ├── graphs/
-│   ├── reward_comparison.pdf
-│   ├── state_route.pdf
-│   ├── state_stability.pdf
-│   └── uncertainty_metrics.pdf
+│   ├── reward_comparison.png
+│   ├── state_route.png
+│   ├── state_stability.png
+│   └── uncertainty_metrics.png
 ├── logs/
 │   ├── eval_500m_log.txt
 │   ├── eval_500m_npc_log.txt
