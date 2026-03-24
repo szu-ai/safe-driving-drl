@@ -7,7 +7,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.x-red)](https://pytorch.org)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-> **Md. Borhan Uddin, Arif Raza, Zhiliang Lin, Lu Wang, Jianqiang Li, Jie Chen**  
+> **Uddin Md. Borhan, Arif Raza, Zhiliang Lin, Lu Wang, Jianqiang Li, Jie Chen**  
 > College of Computer Science and Software Engineering, Shenzhen University  
 > Corresponding author: chenjie@szu.edu.cn
 
@@ -30,14 +30,6 @@ The framework addresses four tightly coupled challenges in closed-loop autonomou
 
 4. **Causal-semantic policy transfer**  
    Transfer learning aligns action distributions, relational attention, and uncertainty statistics across source and target domains, together with meta-initialization for fast adaptation.
-
----
-
-## Paper
-
-- **Research paper:** [paper/Reliable_E2E_Policy_Transfer_with_DRL.pdf](./paper/Reliable_E2E_Policy_Transfer_with_DRL.pdf)
-
-This paper presents a unified reliability-centered driving framework that combines relational state modeling, dense reward shaping, uncertainty-aware policy optimization, and cross-domain transfer for robust autonomous driving under adverse weather and unseen towns.
 
 ---
 
@@ -206,8 +198,6 @@ safe-driving-drl/
 │   ├── eval_town05_npc_log.txt
 │   ├── eval_town10_mixed_log.txt
 │   └── log.txt
-├── paper/
-│   └── Reliable_E2E_Policy_Transfer_with_DRL.pdf
 ├── results/
 │   ├── summaries/
 │   │   ├── Town02_zeroshot_source_agent_summary.csv
