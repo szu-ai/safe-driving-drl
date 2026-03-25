@@ -67,23 +67,24 @@ Town05 zero-shot: mean CTE = 0.183 m, mean heading error = 0.021 rad.
 
 ```text
 Perception (CARLA sensor stack)
-        │
-        ▼
+        |
+        v
 Ego-Centric Relational Graph
-  edges: [Δp, Δv, class, κ, σ²_ale]
-  attention: α_i = softmax(−‖Δp_i‖² / (σ²_i + ε))
-  state: s_t = [z_t; v_ego; a^{t−1}; d_goal; φ_lane; σ²_ale]
-        │
-        ▼
+  edges: [dp, dv, class, kappa, sigma2_ale]
+  attention: alpha_i = softmax(-||dp_i||^2 / (sigma2_i + eps))
+  state: s_t = [z_t; v_ego; a_prev; d_goal; phi_lane; sigma2_ale]
+        |
+        v
 SAC Actor-Critic
-  uncertainty: σ²_dec = σ²_ale + σ²_epi
-  entropy gate: β(σ̄) = β₀(1 − σ̄)
-        │
-        ├─── Dense Reward
-        │    r_t = w_s r_s + w_p r_p + w_c r_c + w_u r_u
-        │
-        └─── Transfer (source→target)
-             L_trans = L_KL + λ_α MMD(α_s, α_t) + λ_u ‖u_s − u_t‖²
+  uncertainty: sigma2_dec = sigma2_ale + sigma2_epi
+  entropy gate: beta(sigma_bar) = beta0 * (1 - sigma_bar)
+        |
+        |--- Dense Reward
+        |    r_t = w_s*r_s + w_p*r_p + w_c*r_c + w_u*r_u
+        |
+        +--- Transfer (source -> target)
+             L_trans = L_KL + lambda_a * MMD(alpha_s, alpha_t)
+                             + lambda_u * ||u_s - u_t||^2
              + MAML initialization
 ```
 
