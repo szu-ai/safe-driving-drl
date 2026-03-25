@@ -19,37 +19,36 @@ This repository contains the official implementation of a unified Deep Reinforce
 
 The framework addresses four tightly coupled challenges in closed-loop autonomous driving:
 
-1. **Ego-centric relational state**  
-   An uncertainty-weighted attention graph captures causal interactions between the ego vehicle and nearby agents, making safety-critical influences explicit to the policy.
-
-2. **Differentiable multi-objective reward shaping**  
-   Dense reward terms jointly optimize safety, progress, comfort, and uncertainty-aware behavior, avoiding unstable sparse event-only penalties.
-
-3. **Uncertainty-gated exploration**  
-   Aleatoric and epistemic uncertainty are combined into a calibrated confidence signal that adaptively modulates policy entropy for risk-aware exploration.
-
-4. **Causal-semantic policy transfer**  
-   Transfer learning aligns action distributions, relational attention, and uncertainty statistics across source and target domains, together with meta-initialization for fast adaptation.
+1. **Ego-centric relational state** — An uncertainty-weighted attention graph captures causal interactions between the ego vehicle and nearby agents, making safety-critical influences explicit to the policy.
+2. **Differentiable multi-objective reward shaping** — Dense reward terms jointly optimize safety, progress, comfort, and uncertainty-aware behavior, avoiding unstable sparse event-only penalties.
+3. **Uncertainty-gated exploration** — Aleatoric and epistemic uncertainty are combined into a calibrated confidence signal that adaptively modulates policy entropy for risk-aware exploration.
+4. **Causal-semantic policy transfer** — Transfer learning aligns action distributions, relational attention, and uncertainty statistics across source and target domains, together with meta-initialization for fast adaptation.
 
 ---
 
-## Unified System Model Figure
+## Unified System Model
 
-The unified system model figure used in this work is shown below.
+<p align="center">
+  <img src="./diagrams/unified_framework.png" width="90%" alt="Unified Framework"/>
+</p>
 
-![Unified Framework Figure](./diagrams/unified_framework.png)
+This unified framework integrates ego-centric relational state construction, dense multi-objective reward shaping, uncertainty-gated SAC exploration, and causal-semantic transfer learning.
 
-This unified framework integrates:
-- ego-centric relational state construction,
-- dense multi-objective reward shaping,
-- uncertainty-gated SAC exploration,
-- causal-semantic transfer learning.
+---
+
+## Closed-Loop Route Coverage
+
+<p align="center">
+  <img src="./close_loop.png" width="55%" alt="Closed-Loop Route Coverage Map"/>
+</p>
+
+Closed-loop trajectory coverage on Town10HD (source domain). Blue trajectories indicate successful runs; red indicates unsuccessful. Dashed lines show planned routes.
 
 ---
 
 ## Key Results
 
-Closed-loop evaluation in CARLA 0.9.15 across Town10HD (source), Town02, and Town05 (targets) under adverse weather shows strong transfer performance and safety improvements.
+Closed-loop evaluation in CARLA 0.9.15 across Town10HD (source), Town02, and Town05 (targets) under adverse weather.
 
 | Map / Setting | SR (%) | DS | IS | Coll./km | Off/km | TO/km |
 |---|---:|---:|---:|---:|---:|---:|
@@ -60,7 +59,7 @@ Closed-loop evaluation in CARLA 0.9.15 across Town10HD (source), Town02, and Tow
 | Town02 — **Target (full transfer)** | — | **214.3** | **0.94** | **0.005** | **0.003** | **0.001** |
 
 **SR** = Success Rate, **DS** = Driving Score, **IS** = Infraction Score.  
-Town05 zero-shot result: mean CTE = 0.183 m, mean heading error = 0.021 rad.
+Town05 zero-shot: mean CTE = 0.183 m, mean heading error = 0.021 rad.
 
 ---
 
@@ -96,77 +95,61 @@ SAC Actor-Critic
 Each scene entity contributes an edge representation containing relative kinematics, semantic type, lane geometry, and aleatoric uncertainty. Uncertainty-weighted attention prioritizes nearby and reliable actors, and the attended embedding is fused with ego motion, route progress, and lane features into a compact policy state.
 
 ### 2. Dense differentiable reward
-The reward combines four objectives:
-- **Safety**
-- **Progress**
-- **Comfort**
-- **Uncertainty**
-
-This produces smoother optimization signals than purely event-triggered penalties and improves stability across source and target domains.
+The reward combines four objectives — **Safety**, **Progress**, **Comfort**, and **Uncertainty** — producing smoother optimization signals than purely event-triggered penalties and improving stability across source and target domains.
 
 ### 3. Uncertainty-gated exploration
-Decision-time uncertainty is decomposed into:
-- **Aleatoric uncertainty** from per-edge heteroscedastic heads
-- **Epistemic uncertainty** from a critic ensemble
-
-These are merged into a confidence signal that gates entropy, making the policy more cautious under low confidence.
+Decision-time uncertainty is decomposed into aleatoric uncertainty (per-edge heteroscedastic heads) and epistemic uncertainty (critic ensemble). These are merged into a confidence signal that gates entropy, making the policy more cautious under low confidence.
 
 ### 4. Causal-semantic transfer
-The transfer objective aligns:
-- action distributions,
-- relational attention patterns,
-- uncertainty statistics,
-
-and combines this with MAML-style initialization for few-shot adaptation to new towns and weather conditions.
+The transfer objective aligns action distributions, relational attention patterns, and uncertainty statistics, combined with MAML-style initialization for few-shot adaptation to new towns and weather conditions.
 
 ---
 
 ## Simulation Screenshots
 
-### Screenshot 1
-[![Simulation Screenshot 1](./screenshot/1.png)](./screenshot/1.png)
-
-### Screenshot 2
-[![Simulation Screenshot 2](./screenshot/2.png)](./screenshot/2.png)
-
-### Screenshot 3
-[![Simulation Screenshot 3](./screenshot/3.png)](./screenshot/3.png)
+<p align="center">
+  <img src="./screenshot/1.png" width="32%" alt="Screenshot 1"/>
+  &nbsp;
+  <img src="./screenshot/2.png" width="32%" alt="Screenshot 2"/>
+  &nbsp;
+  <img src="./screenshot/3.png" width="32%" alt="Screenshot 3"/>
+</p>
 
 ---
 
 ## Demo Videos
 
-GitHub local video embedding inside `README.md` is not consistently supported, so the most reliable presentation is a clickable image plus direct video link.
+> Click a thumbnail to open the video.
 
-### Demo 1
-[![Watch Demo 1](./screenshot/1.png)](./video/1.mp4)  
-Direct link: [video/1.mp4](./video/1.mp4)
-
-### Demo 2
-[![Watch Demo 2](./screenshot/2.png)](./video/2.mp4)  
-Direct link: [video/2.mp4](./video/2.mp4)
-
-### Demo 3
-[![Watch Demo 3](./screenshot/3.png)](./video/3.mp4)  
-Direct link: [video/3.mp4](./video/3.mp4)
+<p align="center">
+  <a href="./video/1.mp4"><img src="./screenshot/1.png" width="30%" alt="Demo 1"/></a>
+  &nbsp;&nbsp;
+  <a href="./video/2.mp4"><img src="./screenshot/2.png" width="30%" alt="Demo 2"/></a>
+  &nbsp;&nbsp;
+  <a href="./video/3.mp4"><img src="./screenshot/3.png" width="30%" alt="Demo 3"/></a>
+</p>
+<p align="center">
+  <a href="./video/1.mp4">Demo 1</a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="./video/2.mp4">Demo 2</a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="./video/3.mp4">Demo 3</a>
+</p>
 
 ---
 
 ## Graphs and Visual Results
 
-The repository includes the main analysis figures used to summarize reward behavior, route performance, stability, and uncertainty.
-
-### Reward Comparison
-![Reward Comparison](./graphs/reward_comparison.png)
-
-### State Route Analysis
-![State Route Analysis](./graphs/state_route.png)
-
-### State Stability Analysis
-![State Stability Analysis](./graphs/state_stability.png)
-
-### Uncertainty Metrics
-![Uncertainty Metrics](./graphs/uncertainty_metrics.png)
+<p align="center">
+  <img src="./graphs/reward_comparison.png" width="48%" alt="Reward Comparison"/>
+  &nbsp;
+  <img src="./graphs/state_route.png" width="48%" alt="State Route Analysis"/>
+</p>
+<p align="center">
+  <img src="./graphs/state_stability.png" width="48%" alt="State Stability Analysis"/>
+  &nbsp;
+  <img src="./graphs/uncertainty_metrics.png" width="48%" alt="Uncertainty Metrics"/>
+</p>
 
 ---
 
@@ -177,6 +160,7 @@ safe-driving-drl/
 ├── car.py
 ├── README.md
 ├── requirements.txt
+├── close_loop.png
 ├── checkpoints/
 │   ├── source_agent_best.pt
 │   └── source_agent.pt
@@ -351,7 +335,7 @@ python3 -u car.py \
 | `--mode` | `eval` | `train` / `eval` / `adapt` / `policy` |
 | `--train-town` | `Town10HD_Opt` | Source training map |
 | `--target-town` | `Town02` | Evaluation or transfer target map |
-| `--spawn-index` | `0` | `-1` for random spawn per episode |
+| `--spawn-index` | `0` | `-1` for random spawn per run |
 | `--route-target-length` | `200` | Route length in meters |
 | `--npc-min` / `--npc-max` | `0` / `2` | NPC traffic count range |
 | `--no-rendering` | off | Disable CARLA GUI |
@@ -362,38 +346,21 @@ python3 -u car.py \
 
 ## Troubleshooting
 
-### `import carla` fails
-
+**`import carla` fails**
 ```bash
 export CARLA_ROOT=~/CARLA_0.9.15
 export PYTHONPATH=$PYTHONPATH:~/CARLA_0.9.15/PythonAPI/carla/dist/carla-0.9.15-py3.10-linux-x86_64.egg
 ```
 
-### CARLA server crashes with many NPCs
+**CARLA server crashes with many NPCs** — Add `--no-rendering`
 
-Add:
+**Town02 route planner warning** — Reduce route length: `--route-target-length 150`
 
-```bash
---no-rendering
-```
-
-### Town02 route planner warning
-
-If route generation is limited on Town02, reduce route length:
-
-```bash
---route-target-length 150
-```
-
-### Alpha collapses during training
-
-This implementation includes a clamp on `log_alpha` to prevent entropy collapse during long training runs.
+**Alpha collapses during training** — This implementation includes a clamp on `log_alpha` to prevent entropy collapse during long training runs.
 
 ---
 
 ## Citation
-
-If you use this code, please cite:
 
 ```bibtex
 @inproceedings{uddin2026reliable,
