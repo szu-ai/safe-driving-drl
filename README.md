@@ -53,13 +53,13 @@ Closed-loop evaluation in CARLA 0.9.15 across Town10HD (source), Town02, and Tow
 | Map / Setting | SR (%) | DS | IS | Coll./km | Off/km | TO/km |
 |---|---:|---:|---:|---:|---:|---:|
 | Town10HD (source training) | 91.2 | 94.1 | 1.00 | 0.000 | 0.000 | 0.000 |
-| Town05 (zero-shot transfer) | 100.0 | 94.1 | 1.00 | 0.000 | 0.000 | 0.000 |
+| Town05 (zero-shot transfer) | 100.0 | 94.6 | 1.00 | 0.000 | 0.000 | 0.000 |
 | Town02 — Policy Learning | — | 188.6 | 0.88 | 0.007 | 0.005 | 0.003 |
 | Town02 — Source Domain | — | 205.7 | 0.92 | 0.006 | 0.004 | 0.002 |
 | Town02 — **Target (full transfer)** | — | **214.3** | **0.94** | **0.005** | **0.003** | **0.001** |
 
 **SR** = Success Rate, **DS** = Driving Score, **IS** = Infraction Score.  
-Town05 zero-shot: mean CTE = 0.183 m, mean heading error = 0.021 rad.
+Town05 zero-shot: mean CTE = 0.192 m, mean heading error = 0.021 rad.
 
 ---
 
