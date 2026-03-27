@@ -1,5 +1,4 @@
 # Reliable Policy Transfer for Safety-Aware End-to-End Driving with Deep Reinforcement Learning
-
 **CVPR 2026 · Submission 38759**
 
 [![Python](https://img.shields.io/badge/Python-3.10-blue)](https://python.org)
@@ -58,7 +57,7 @@ Closed-loop evaluation in CARLA 0.9.15 across Town10HD (source), Town02, and Tow
 | Town02 — Source Domain | 80.3 | 82.6 | 205.7 | 0.92 | 0.006 | 0.004 | 0.002 |
 | Town02 — **Target (full transfer)** | **85.0** | **84.1** | **214.3** | **0.94** | **0.005** | **0.003** | **0.001** |
 
-**SR** = Success Rate, **RC** = Route Completion, **DS** = Driving Score, **IS** = Infraction Score.
+**SR** = Success Rate, **RC** = Route Completion, **DS** = Driving Score, **IS** = Infraction Score.  
 Town05 zero-shot: CTE = 0.192 m, heading error = 0.021 rad. Town10HD source: reward 265.3, CTE 0.65.
 
 ---
@@ -119,11 +118,11 @@ This section describes how each framework component is concretely implemented in
 Each nearby entity (vehicle, walker, traffic light) is assembled into a 10-dimensional directed edge:
 
 ```
-[rel_x, rel_y]        normalised ego-frame position  (/ entity_max_dist=60 m)
-[rel_vx, rel_vy]      normalised relative velocity   (/ 15 m/s, 10 m/s)
+[rel_x, rel_y]         normalised ego-frame position  (/ entity_max_dist=60 m)
+[rel_vx, rel_vy]       normalised relative velocity   (/ 15 m/s, 10 m/s)
 [sem_v, sem_w, sem_tl] one-hot semantic class
-[curvature, heading]  local lane geometry kappa_i
-[sigma2]              per-entity aleatoric variance
+[curvature, heading]   local lane geometry kappa_i
+[sigma2]               per-entity aleatoric variance
 ```
 
 Observation noise scales jointly with distance and fog density, forcing the model to be robust to partial observability:
@@ -204,7 +203,6 @@ r_c = -(k_j * jerk**2) - (k_delta * steer_rate**2)   # clipped to [-5, 0]
 ```python
 # env.step(): fast proxy
 sigma_proxy = (1 - muA) * 0.70 + (1 - near_norm) * 0.30
-
 # train_loop(): recompute_agent_reward() overwrites the stored replay reward
 reward, sigma_bar = recompute_agent_reward(agent, obs, action, info)
 replay.add(obs, action, reward, next_obs, done)   # correct reward stored
@@ -225,7 +223,7 @@ sigma_dec = sigma_ale + sigma_epi
 sigma_bar = calibrator(sigma_dec)         # normalised to [0, 1]
 ```
 
-`UncertaintyCalibrator` fits a robust scaler every `calibrate_every_steps=10,000` steps on replay samples, using the 5th-95th percentile range and the MAD-based scale, then maps via sigmoid:
+`UncertaintyCalibrator` fits a robust scaler every `calibrate_every_steps=10,000` steps on replay samples, using the 5th–95th percentile range and the MAD-based scale, then maps via sigmoid:
 
 ```python
 arr_mm    = clip((arr - lo) / (hi - lo), 0, 1)
@@ -258,13 +256,10 @@ L_actor   = E[alpha_eff * log_pi - min_k Q_k]
 ```python
 # KL: action distribution alignment
 kl_loss  = KL(Normal(mu_s, std_s) || Normal(mu_t, std_t)).sum(action_dim).mean()
-
 # MMD: relational attention map alignment (5-kernel Gaussian MMD)
 mmd_loss = MMD(alpha_s.reshape(B,-1), alpha_t.reshape(B,-1))
-
 # Uncertainty moment matching: [sigma_bar, mean(sigma2_i), std(sigma2_i)]
 u_loss   = MSE(u_t, u_s.detach())
-
 L_trans  = kl_loss + lambda_alpha*mmd_loss + lambda_u*u_loss
 total_actor_loss = actor_loss + lambda_transfer * L_trans
 ```
@@ -280,7 +275,6 @@ for each domain_batch:
     query_loss  = L_RL(fast_actor, query_half)
     weight      = 1 / (1 + query_loss)           # down-weight poorly adapted domains
     delta       = fast_actor_params - base_params
-
 actor_params += step_size * weighted_mean(delta)
 ```
 
@@ -298,7 +292,6 @@ The `train_loop()` function handles all training modes with a unified interface:
 Startup:
   Collect warm-up batches via random exploration (sample_exploration_action)
   Apply MAML initialisation to actor parameters
-
 Per step:
   1. Random actions for first start_steps=2000 steps; then stochastic actor.act()
   2. env.step(action) -> next_obs, info
@@ -308,7 +301,6 @@ Per step:
   6. Every calibrate_every_steps=10000: fit calibrator + auto-select beta0
   7. Every save_every_steps=5000: save checkpoint
   8. Every eval_every_steps=10000: run evaluate() on target town
-
 Dual replay (adapt mode only):
   Source env runs in parallel; source_replay filled alongside target_replay
   Both sampled every update step; source_batch passed to compute_transfer_loss()
@@ -340,20 +332,16 @@ Screenshots captured live from the **CarlaUE4** spectator camera during training
 <p align="center">
 <b>Left — Wet urban intersection, Park Avenue (training episode).</b>
 The ego holds lane centre while navigating toward a signalised intersection with NPC vehicles scattered across lanes. The red-light compliance term rho_t in the safety reward activates when the signal ahead is red. Corridor membership muA is reduced by combined fog and NPC density, tightening the admissible lane deviation window automatically.
-  
 </p>
 
 <p align="center">
 <b>Centre — Multi-lane straight road with active traffic signals (evaluation episode).</b>
-
 The ego decelerates through a sweeping left turn on a wet road. Curvature-aware target speed scheduling (<code>target_speed - curve_speed_penalty * curv_norm</code>) reduces desired speed proportionally to road curvature. The comfort penalty suppresses oscillatory steering and the route CTE remains within the corridor. The double-yellow centre line and pavement kerb confirm correct lane adherence.
-
 </p>
 
 <p align="center">
 <b>Right — Left-curve near commercial district, palm-tree boulevard (evaluation episode).</b>
 The ego approaches a cross-road junction with multiple NPC vehicles crossing from the left. The rain-soaked reflective road surface and active cross-traffic exercise the proximity reward psi_P and TTC-based braking inside <code>_policy_passthrough_filter()</code>. Observation noise is elevated here: entity miss rate is approximately 30–40 % at this range under this fog level.
- 
 </p>
 
 ---
@@ -378,8 +366,11 @@ Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows
   <a href="./video/3.mp4"><b>Demo 3 — Curved road, near-zero visibility</b></a>
 </p>
 
-**Demo 1,2 & 3** shows the ego navigating a busy intersection with NPC vehicles crossing from the left. When the traffic light turns red, the agent decelerates well before the stop line — the red-light compliance term rho_t in the safety reward and the TTC-based caution logic inside `_get_min_vehicle_ttc()` both activate. Once the intersection clears, the ego re-accelerates smoothly to target speed (18 km/h) with no overshoot, held in check by the throttle and steer rate limiters (±0.06/step, ±0.08/step).
+**Demo 1 — Intersection with NPC cross-traffic.** The ego navigates a busy intersection with NPC vehicles crossing from the left. When the traffic light turns red, the agent decelerates well before the stop line — the red-light compliance term rho_t in the safety reward and the TTC-based caution logic inside `_get_min_vehicle_ttc()` both activate. Once the intersection clears, the ego re-accelerates smoothly to target speed (18 km/h) with no overshoot, held in check by the throttle and steer rate limiters (±0.06/step, ±0.08/step).
 
+**Demo 2 — Signalised straight road.** The ego maintains lane centre along a multi-lane straight under active traffic signals and wet-road conditions. The uncertainty gate keeps policy entropy low (high sigma_bar from reduced visibility), producing steady, low-variance throttle and steer outputs. Route CTE stays within the corridor throughout.
+
+**Demo 3 — Curved road, near-zero visibility.** The ego handles a sharp curve under dense fog with near-zero forward visibility. Rising epistemic uncertainty from the critic ensemble suppresses exploration, causing the agent to decelerate and tighten steering gradually rather than commit to an aggressive line — the cautious behaviour predicted by beta(sigma_bar) = beta0 * (1 - sigma_bar).
 
 ---
 
@@ -388,12 +379,29 @@ Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows
 <p align="center">
   <img src="./graphs/reward_comparison.png" width="48%" alt="Reward Comparison"/>
   &nbsp;
-  <img src="./graphs/state_route.png" width="48%" alt="State Route Analysis"/>
+  <img src="./graphs/state_route.png" width="48%" alt="Route Completion Metrics"/>
 </p>
+
 <p align="center">
-  <img src="./graphs/state_stability.png" width="48%" alt="State Stability Analysis"/>
+<b>Left — Reward Comparison (Sec. 4.3).</b> Average episodic reward on Town10HD. The differentiable multi-objective reward (Eqs. 9–13) reaches 265.3, improving 45.1 % over the nearest baseline RaSc (182.9) and 69.6 % over ST-P3 (156.4), with smoother learning curves due to continuous surrogates replacing sparse event penalties.
+</p>
+
+<p align="center">
+<b>Right — Route Completion Metrics (Sec. 4.2).</b> Off-road percentage (blue, lower is better) and goal completion rate (orange, higher is better) across all methods. The causal relational state cuts off-road from 10.8 % (ST-P3) to 4.1 % — a 62 % reduction — while lifting goal completion to 79.5 %, confirming that uncertainty-weighted attention improves both lane-keeping and navigation success simultaneously.
+</p>
+
+<p align="center">
+  <img src="./graphs/state_stability.png" width="48%" alt="State Stability — CTE and Heading Error"/>
   &nbsp;
-  <img src="./graphs/uncertainty_metrics.png" width="48%" alt="Uncertainty Metrics"/>
+  <img src="./graphs/uncertainty_metrics.png" width="48%" alt="Uncertainty-Gated Exploration Metrics"/>
+</p>
+
+<p align="center">
+<b>Left — Ego-Relational State Stability (Sec. 4.2).</b> Cross-Track Error (CTE, blue) and heading error (green) on Town10HD. The ego-centric relational graph with uncertainty-weighted attention reduces CTE to 0.65 (28.6 % below ST-P3) and heading error to 0.31 (47.5 % below ST-P3), reflecting tighter lane geometry and ego dynamics fusion in the decision state.
+</p>
+
+<p align="center">
+<b>Right — Uncertainty-Gated Exploration (Sec. 4.4).</b> Exploration variance (blue, lower), collision rate ×100 (red, lower), and stability (green, higher). The joint aleatoric–epistemic entropy gate achieves the lowest variance (0.62) and collision rate (0.60 ×100 = 0.006/km) while reaching the highest stability score (0.91), validating that sigma_bar-driven entropy modulation produces a safer yet not overly conservative policy.
 </p>
 
 ---
@@ -452,8 +460,11 @@ safe-driving-drl/
 │   └── train_short.sh
 └── video/
     ├── 1.mp4                       <- intersection navigation demo
+    ├── 1.png                       <- thumbnail for Demo 1
     ├── 2.mp4                       <- straight road with signals demo
+    ├── 2.png                       <- thumbnail for Demo 2
     └── 3.mp4                       <- curved road, low visibility demo
+    └── 3.png                       <- thumbnail for Demo 3
 ```
 
 ---
@@ -473,6 +484,7 @@ pip install -r requirements.txt
 ```
 
 `requirements.txt`:
+
 ```text
 torch>=2.0
 numpy
@@ -514,11 +526,11 @@ python3 -u car.py \
   --train-steps 500000 \
   --train-npc-min 8 --train-npc-max 20 \
   --source-weather night_rain_fog \
-  --out-dir ./culrt_carla_0915_aligned \
+  --out-dir ./output \
   --maml-warmup-batches 10 \
   --start-steps 2000 --update-after 1000 \
   --save-every-steps 5000 \
-  --debug 2>&1 | tee ./culrt_carla_0915_aligned/train_log.txt
+  --debug 2>&1 | tee ./output/train_log.txt
 ```
 
 ### 3. Evaluate on Town05 (zero-shot)
@@ -531,8 +543,8 @@ python3 -u car.py \
   --target-weather mixed \
   --spawn-index 0 \
   --eval-episodes 20 \
-  --checkpoint ./culrt_carla_0915_aligned/models/source_agent.pt \
-  --out-dir ./culrt_carla_0915_aligned \
+  --checkpoint ./output/models/source_agent.pt \
+  --out-dir ./output \
   --target-goal-index -1 \
   --npc-min 8 --npc-max 15 \
   --debug
@@ -548,13 +560,13 @@ python3 -u car.py \
   --target-weather mixed \
   --spawn-index -1 \
   --eval-episodes 20 \
-  --checkpoint ./culrt_carla_0915_aligned/models/source_agent.pt \
-  --out-dir ./culrt_carla_0915_aligned \
+  --checkpoint ./output/models/source_agent.pt \
+  --out-dir ./output \
   --target-goal-index -1 \
   --route-target-length 500 \
   --npc-min 8 --npc-max 15 \
   --no-rendering \
-  --debug 2>&1 | tee ./culrt_carla_0915_aligned/eval_500m_npc_log.txt
+  --debug 2>&1 | tee ./output/eval_500m_npc_log.txt
 ```
 
 ### 5. Cross-town evaluation on Town02
@@ -567,8 +579,8 @@ python3 -u car.py \
   --target-weather mixed \
   --spawn-index 0 \
   --eval-episodes 20 \
-  --checkpoint ./culrt_carla_0915_aligned/models/source_agent.pt \
-  --out-dir ./culrt_carla_0915_aligned \
+  --checkpoint ./output/models/source_agent.pt \
+  --out-dir ./output \
   --target-goal-index -1 \
   --npc-min 8 --npc-max 15 \
   --debug
@@ -587,13 +599,13 @@ python3 -u car.py \
   --source-weather night_rain_fog \
   --target-weather mixed \
   --spawn-index 0 \
-  --source-checkpoint ./culrt_carla_0915_aligned/models/source_agent.pt \
+  --source-checkpoint ./output/models/source_agent.pt \
   --adapt-steps 50000 \
   --adapt-episodes 100 \
   --maml-warmup-batches 10 \
   --npc-min 8 --npc-max 15 \
   --train-npc-min 8 --train-npc-max 20 \
-  --out-dir ./culrt_carla_0915_aligned \
+  --out-dir ./output \
   --debug
 ```
 
@@ -607,7 +619,7 @@ python3 -u car.py \
 | `--train-town` | `Town10HD_Opt` | Source training map |
 | `--target-town` | `Town02` | Evaluation or transfer target map |
 | `--spawn-index` | `0` | `-1` for random spawn per episode (required for training) |
-| `--train-goal-index` | `40` | Source route goal (`-1` = auto-route) |
+| `--train-goal-index` | `-1` | Source route goal (`-1` = auto-route) |
 | `--target-goal-index` | `-1` | Target route goal (`-1` = auto-route, safe for all towns) |
 | `--route-target-length` | `200` | Route arc-length in metres; scales all thresholds proportionally |
 | `--npc-min` / `--npc-max` | `0` / `2` | Eval NPC count range |
@@ -632,10 +644,12 @@ python3 -u car.py \
 ## Troubleshooting
 
 **`import carla` fails**
+
 ```bash
 export CARLA_ROOT=~/CARLA_0.9.15
 export PYTHONPATH=$PYTHONPATH:~/CARLA_0.9.15/PythonAPI/carla/dist/carla-0.9.15-py3.10-linux-x86_64.egg
 ```
+
 `car.py` auto-discovers the CARLA egg by scanning `$CARLA_ROOT`, `~/carla`, `~/CARLA_0.9.15`, and related paths — see `_setup_carla_pythonapi()` for the full search order.
 
 **CARLA server crashes with many NPCs** — Add `--no-rendering`. For headless training this is always recommended.
