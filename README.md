@@ -15,7 +15,7 @@
 ## Overview
 
 <p align="justify">
-This repository contains the official implementation of a unified Deep Reinforcement Learning (DRL) framework for **safety-aware end-to-end autonomous driving with reliable policy transfer** in **CARLA 0.9.15**. The entire system (environment, neural networks, SAC agent, training loops, and evaluation) is implemented in a single self-contained file `car.py` (~4,600 lines).
+This repository contains the official implementation of a unified Deep Reinforcement Learning (DRL) framework for <b>safety-aware end-to-end autonomous driving with reliable policy transfer</b>b> in <b>CARLA 0.9.15<b>. The entire system (environment, neural networks, SAC agent, training loops, and evaluation) is implemented in a single self-contained file `car.py` (~4,600 lines).
 </p>
 
 The framework addresses four tightly coupled challenges in closed-loop autonomous driving:
@@ -209,7 +209,7 @@ scale     = 1.4826 * median(|arr_mm - center|)    # robust MAD scale
 sigma_bar = sigmoid((x_norm - center) / (scale * temperature))
 ```
 
-`beta0` is automatically selected from `{0.5, 1.0}` each calibration cycle by evaluating actor loss on a held-out replay split — no manual tuning needed.
+`beta0` is automatically selected from `{0.5, 1.0}` each calibration cycle by evaluating actor loss on a held-out replay split, no manual tuning needed.
 
 Entropy gating in the actor update:
 
@@ -255,7 +255,7 @@ for each domain_batch:
 actor_params += step_size * weighted_mean(delta)
 ```
 
-The MAML loop contributes zero overhead at inference — only a single actor forward pass runs during evaluation.
+The MAML loop contributes zero overhead at inference, only a single actor forward pass runs during evaluation.
 
 ---
 
@@ -534,7 +534,7 @@ python3 -u car.py \
 ## Simulation Images
 
 <p align="justify">
-Screenshots captured live from the **CarlaUE4** spectator camera during training and evaluation on **Town10HD**, the source training domain. The adversarial weather regime is active in all three: heavy rain, dense fog, and nighttime lighting (cloudiness 90 %, precipitation 90 %, fog density 40 %, sun altitude −25°). The ego vehicle is the red Tesla Model 3. NPC traffic ranges from 8 to 20 per episode during training and 8 to 15 during evaluation. The spectator camera follows the ego 8 m behind at 4 m elevation with −15° pitch, updated every `env.step()` via `_snap_spectator_to_ego()`.
+Screenshots captured live from the <b>CarlaUE4</b>b> spectator camera during training and evaluation on <b>Town10HD</b>b>, the source training domain. The adversarial weather regime is active in all three: heavy rain, dense fog, and nighttime lighting (cloudiness 90 %, precipitation 90 %, fog density 40 %, sun altitude −25°). The ego vehicle is the red Tesla Model 3. NPC traffic ranges from 8 to 20 per episode during training and 8 to 15 during evaluation. The spectator camera follows the ego 8 m behind at 4 m elevation with −15° pitch, updated every `env.step()` via `_snap_spectator_to_ego()`.
 </p>
 
 <p align="center">
@@ -565,7 +565,7 @@ The ego approaches a cross-road junction with multiple NPC vehicles crossing fro
 ## Simulation Videos
 
 <p align="justify">
-Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows the ego Tesla Model 3 completing part of its ~200 m closed-loop route on **Town10HD** under the adversarial night/rain/fog weather. The agent runs fully deterministic inference (`agent.act(obs, deterministic=True)`) with no safety shield active. The spectator camera follows the ego via `_snap_spectator_to_ego()` called every step.
+Recorded during closed-loop <b>evaluation</b>b> runs in CARLA 0.9.15. Each clip shows the ego Tesla Model 3 completing part of its ~200 m closed-loop route on <b>Town10HD<b> under the adversarial night/rain/fog weather. The agent runs fully deterministic inference (`agent.act(obs, deterministic=True)`) with no safety shield active. The spectator camera follows the ego via `_snap_spectator_to_ego()` called every step.
 </p>
 
 <p align="center">
@@ -585,7 +585,7 @@ Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows
 </p>
 
 <p align="justify">
-<b>Video 01: Intersection with NPC cross-traffic.</b> The ego navigates a busy intersection with NPC vehicles crossing from the left. When the traffic light turns red, the agent decelerates well before the stop line — the red-light compliance term rho_t in the safety reward and the TTC-based caution logic inside `_get_min_vehicle_ttc()` both activate. Once the intersection clears, the ego re-accelerates smoothly to target speed (18 km/h) with no overshoot, held in check by the throttle and steer rate limiters (±0.06/step, ±0.08/step).
+<b>Video 01: Intersection with NPC cross-traffic.</b> The ego navigates a busy intersection with NPC vehicles crossing from the left. When the traffic light turns red, the agent decelerates well before the stop line, the red-light compliance term rho_t in the safety reward and the TTC-based caution logic inside `_get_min_vehicle_ttc()` both activate. Once the intersection clears, the ego re-accelerates smoothly to target speed (18 km/h) with no overshoot, held in check by the throttle and steer rate limiters (±0.06/step, ±0.08/step).
 </p>
 
 <p align="justify">
@@ -593,7 +593,7 @@ Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows
 </p>
 
 <p align="justify">
-<b>Video 03: Curved road, near-zero visibility.</b> The ego handles a sharp curve under dense fog with near-zero forward visibility. Rising epistemic uncertainty from the critic ensemble suppresses exploration, causing the agent to decelerate and tighten steering gradually rather than commit to an aggressive line — the cautious behaviour predicted by beta(sigma_bar) = beta0 * (1 - sigma_bar).
+<b>Video 03: Curved road, near-zero visibility.</b> The ego handles a sharp curve under dense fog with near-zero forward visibility. Rising epistemic uncertainty from the critic ensemble suppresses exploration, causing the agent to decelerate and tighten steering gradually rather than commit to an aggressive line, the cautious behaviour predicted by beta(sigma_bar) = beta0 * (1 - sigma_bar).
 </p>
 
 ---
@@ -611,7 +611,7 @@ Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows
 </p>
 
 <p align="justify">
-<b>Right: Route Completion Metrics (Sec. 4.2).</b> Off-road percentage (blue, lower is better) and goal completion rate (orange, higher is better) across all methods. The causal relational state cuts off-road from 10.8 % (ST-P3) to 4.1 % — a 62 % reduction — while lifting goal completion to 79.5 %, confirming that uncertainty-weighted attention improves both lane-keeping and navigation success simultaneously.
+<b>Right: Route Completion Metrics (Sec. 4.2).</b> Off-road percentage (blue, lower is better) and goal completion rate (orange, higher is better) across all methods. The causal relational state cuts off-road from 10.8 % (ST-P3) to 4.1 % — a 62 % reduction, while lifting goal completion to 79.5 %, confirming that uncertainty-weighted attention improves both lane-keeping and navigation success simultaneously.
 </p>
 
 <p align="center">
