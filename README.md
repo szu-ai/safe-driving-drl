@@ -339,12 +339,15 @@ Screenshots captured live from the **CarlaUE4** spectator camera during training
 
 <p align="center">
 <b>Left — Wet urban intersection, Park Avenue (training episode).</b>
-The ego approaches a cross-road junction with multiple NPC vehicles crossing from the left. The rain-soaked reflective road surface and active cross-traffic exercise the proximity reward psi_P and TTC-based braking inside <code>_policy_passthrough_filter()</code>. Observation noise is elevated here: entity miss rate is approximately 30–40 % at this range under this fog level.
+The ego holds lane centre while navigating toward a signalised intersection with NPC vehicles scattered across lanes. The red-light compliance term rho_t in the safety reward activates when the signal ahead is red. Corridor membership muA is reduced by combined fog and NPC density, tightening the admissible lane deviation window automatically.
+  
 </p>
 
 <p align="center">
 <b>Centre — Multi-lane straight road with active traffic signals (evaluation episode).</b>
-The ego holds lane centre while navigating toward a signalised intersection with NPC vehicles scattered across lanes. The red-light compliance term rho_t in the safety reward activates when the signal ahead is red. Corridor membership muA is reduced by combined fog and NPC density, tightening the admissible lane deviation window automatically.
+
+The ego approaches a cross-road junction with multiple NPC vehicles crossing from the left. The rain-soaked reflective road surface and active cross-traffic exercise the proximity reward psi_P and TTC-based braking inside <code>_policy_passthrough_filter()</code>. Observation noise is elevated here: entity miss rate is approximately 30–40 % at this range under this fog level.
+
 </p>
 
 <p align="center">
@@ -374,11 +377,8 @@ Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows
   <a href="./video/3.mp4"><b>Demo 3 — Curved road, near-zero visibility</b></a>
 </p>
 
-**Demo 1** shows the ego navigating a busy intersection with NPC vehicles crossing from the left. When the traffic light turns red, the agent decelerates well before the stop line — the red-light compliance term rho_t in the safety reward and the TTC-based caution logic inside `_get_min_vehicle_ttc()` both activate. Once the intersection clears, the ego re-accelerates smoothly to target speed (18 km/h) with no overshoot, held in check by the throttle and steer rate limiters (±0.06/step, ±0.08/step).
+**Demo 1,2 & 3** shows the ego navigating a busy intersection with NPC vehicles crossing from the left. When the traffic light turns red, the agent decelerates well before the stop line — the red-light compliance term rho_t in the safety reward and the TTC-based caution logic inside `_get_min_vehicle_ttc()` both activate. Once the intersection clears, the ego re-accelerates smoothly to target speed (18 km/h) with no overshoot, held in check by the throttle and steer rate limiters (±0.06/step, ±0.08/step).
 
-**Demo 2** shows a long straight-road segment in heavy rain with multiple traffic signals ahead and NPC vehicles across lanes. Uncertainty sigma_bar is elevated due to fog and NPC density, which reduces the entropy coefficient beta and constrains policy stochasticity — the agent drives conservatively, holding CTE near 0.65 m despite roughly half the distant entities being dropped by the observation noise model. The velocity projection reward rp_vel maintains forward momentum between route waypoints.
-
-**Demo 3** shows the ego entering a curved road segment near a palm-tree boulevard in near-zero visibility. Curvature-aware speed scheduling reduces the desired speed below 18 km/h as road curvature rises. The comfort penalty limits both jerk and steering rate, producing a smooth arc through the bend. The agent exits the curve still within the lane corridor, well inside the `max_route_deviation_m=5.5 m` off-road termination threshold.
 
 ---
 
