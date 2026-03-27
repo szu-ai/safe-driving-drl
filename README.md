@@ -363,11 +363,11 @@ The ego approaches a cross-road junction with multiple NPC vehicles crossing fro
 Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows the ego Tesla Model 3 completing part of its ~200 m closed-loop route on **Town10HD** under the adversarial night/rain/fog weather. The agent runs fully deterministic inference (`agent.act(obs, deterministic=True)`) with no safety shield active. The spectator camera follows the ego via `_snap_spectator_to_ego()` called every step.
 
 <p align="center">
-  <a href="./video/1.mp4"><img src="./screenshot/1.png" width="30%" alt="Demo 1 — Intersection navigation"/></a>
+  <a href="./video/1.mp4"><img src="./video/1.png" width="30%" alt="Demo 1 — Intersection navigation"/></a>
   &nbsp;&nbsp;
-  <a href="./video/2.mp4"><img src="./screenshot/2.png" width="30%" alt="Demo 2 — Straight road with traffic signals"/></a>
+  <a href="./video/2.mp4"><img src="./video/2.png" width="30%" alt="Demo 2 — Straight road with traffic signals"/></a>
   &nbsp;&nbsp;
-  <a href="./video/3.mp4"><img src="./screenshot/3.png" width="30%" alt="Demo 3 — Curve handling, low visibility"/></a>
+  <a href="./video/3.mp4"><img src="./video/3.png" width="30%" alt="Demo 3 — Curve handling, low visibility"/></a>
 </p>
 
 <p align="center">
