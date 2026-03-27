@@ -47,6 +47,7 @@ The unified framework integrates ego-centric relational state construction, dens
 <p align="justify">
 Closed-loop trajectory coverage on Town10HD (source domain). Blue trajectories indicate successful runs; red indicates unsuccessful. Dashed lines show planned routes.
 </p>
+
 ---
 
 ## Key Results
