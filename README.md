@@ -16,17 +16,13 @@
 
 <p align="justify">
 This repository contains the official implementation of a unified Deep Reinforcement Learning (DRL) framework for **safety-aware end-to-end autonomous driving with reliable policy transfer** in **CARLA 0.9.15**. The entire system (environment, neural networks, SAC agent, training loops, and evaluation) is implemented in a single self-contained file `car.py` (~4,600 lines).
+</p>
 
 The framework addresses four tightly coupled challenges in closed-loop autonomous driving:
-</p>
-
-<p align="justify">
 1. **Ego-centric relational state:** An uncertainty-weighted attention graph captures causal interactions between the ego vehicle and nearby agents, making safety-critical influences explicit to the policy.
-</p>
 2. **Differentiable multi-objective reward shaping:** Dense reward terms jointly optimize safety, progress, comfort, and uncertainty-aware behavior, avoiding unstable sparse event-only penalties.
 3. **Uncertainty-gated exploration:** Aleatoric and epistemic uncertainty are combined into a calibrated confidence signal that adaptively modulates policy entropy for risk-aware exploration.
 4. **Causal-semantic policy transfer:** Transfer learning aligns action distributions, relational attention, and uncertainty statistics across source and target domains, with meta-initialization for fast adaptation.
-</p>
 
 ---
 
