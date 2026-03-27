@@ -18,10 +18,10 @@ This repository contains the official implementation of a unified Deep Reinforce
 
 The framework addresses four tightly coupled challenges in closed-loop autonomous driving:
 
-1. **Ego-centric relational state** — An uncertainty-weighted attention graph captures causal interactions between the ego vehicle and nearby agents, making safety-critical influences explicit to the policy.
-2. **Differentiable multi-objective reward shaping** — Dense reward terms jointly optimize safety, progress, comfort, and uncertainty-aware behavior, avoiding unstable sparse event-only penalties.
-3. **Uncertainty-gated exploration** — Aleatoric and epistemic uncertainty are combined into a calibrated confidence signal that adaptively modulates policy entropy for risk-aware exploration.
-4. **Causal-semantic policy transfer** — Transfer learning aligns action distributions, relational attention, and uncertainty statistics across source and target domains, with meta-initialization for fast adaptation.
+1. **Ego-centric relational state:** An uncertainty-weighted attention graph captures causal interactions between the ego vehicle and nearby agents, making safety-critical influences explicit to the policy.
+2. **Differentiable multi-objective reward shaping:** Dense reward terms jointly optimize safety, progress, comfort, and uncertainty-aware behavior, avoiding unstable sparse event-only penalties.
+3. **Uncertainty-gated exploration:** Aleatoric and epistemic uncertainty are combined into a calibrated confidence signal that adaptively modulates policy entropy for risk-aware exploration.
+4. **Causal-semantic policy transfer:** Transfer learning aligns action distributions, relational attention, and uncertainty statistics across source and target domains, with meta-initialization for fast adaptation.
 
 ---
 
@@ -31,7 +31,7 @@ The framework addresses four tightly coupled challenges in closed-loop autonomou
   <img src="./diagrams/unified_framework.png" width="90%" alt="Unified Framework"/>
 </p>
 
-The unified framework integrates ego-centric relational state construction, dense multi-objective reward shaping, uncertainty-gated SAC exploration, and causal-semantic transfer learning — all sharing a single control-layer uncertainty interface (sigma-bar).
+The unified framework integrates ego-centric relational state construction, dense multi-objective reward shaping, uncertainty-gated SAC exploration, and causal-semantic transfer learning, all sharing a single control-layer uncertainty interface (sigma-bar).
 
 ---
 
@@ -53,9 +53,9 @@ Closed-loop evaluation in CARLA 0.9.15 across Town10HD (source), Town02, and Tow
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Town10HD (source training) | 91.2 | 94.1 | 94.1 | 1.00 | 0.000 | 0.000 | 0.000 |
 | Town05 (zero-shot transfer) | 100.0 | 94.6 | 94.6 | 1.00 | 0.000 | 0.000 | 0.000 |
-| Town02 — Policy Learning | 72.1 | 75.2 | 188.6 | 0.88 | 0.007 | 0.005 | 0.003 |
-| Town02 — Source Domain | 80.3 | 82.6 | 205.7 | 0.92 | 0.006 | 0.004 | 0.002 |
-| Town02 — **Target (full transfer)** | **85.0** | **84.1** | **214.3** | **0.94** | **0.005** | **0.003** | **0.001** |
+| Town02, Policy Learning | 72.1 | 75.2 | 188.6 | 0.88 | 0.007 | 0.005 | 0.003 |
+| Town02, Source Domain | 80.3 | 82.6 | 205.7 | 0.92 | 0.006 | 0.004 | 0.002 |
+| Town02, **Target (full transfer)** | **85.0** | **84.1** | **214.3** | **0.94** | **0.005** | **0.003** | **0.001** |
 
 **SR** = Success Rate, **RC** = Route Completion, **DS** = Driving Score, **IS** = Infraction Score.  
 Town05 zero-shot: CTE = 0.192 m, heading error = 0.021 rad. Town10HD source: reward 265.3, CTE 0.65.
@@ -319,7 +319,7 @@ The passthrough filter blends in a rule-based guidance controller that increases
 
 ## Simulation Screenshots
 
-Screenshots captured live from the **CarlaUE4** spectator camera during training and evaluation on **Town10HD** — the source training domain. The adversarial weather regime is active in all three: heavy rain, dense fog, and nighttime lighting (cloudiness 90 %, precipitation 90 %, fog density 40 %, sun altitude −25°). The ego vehicle is the red Tesla Model 3. NPC traffic ranges from 8 to 20 per episode during training and 8 to 15 during evaluation. The spectator camera follows the ego 8 m behind at 4 m elevation with −15° pitch, updated every `env.step()` via `_snap_spectator_to_ego()`.
+Screenshots captured live from the **CarlaUE4** spectator camera during training and evaluation on **Town10HD**, the source training domain. The adversarial weather regime is active in all three: heavy rain, dense fog, and nighttime lighting (cloudiness 90 %, precipitation 90 %, fog density 40 %, sun altitude −25°). The ego vehicle is the red Tesla Model 3. NPC traffic ranges from 8 to 20 per episode during training and 8 to 15 during evaluation. The spectator camera follows the ego 8 m behind at 4 m elevation with −15° pitch, updated every `env.step()` via `_snap_spectator_to_ego()`.
 
 <p align="center">
   <img src="./screenshot/1.png" width="32%" alt="Wet urban intersection at night"/>
@@ -329,33 +329,33 @@ Screenshots captured live from the **CarlaUE4** spectator camera during training
   <img src="./screenshot/3.png" width="32%" alt="Left-curve near commercial district"/>
 </p>
 
-<p align="center">
-<b>Left — Wet urban intersection, Park Avenue (training episode).</b>
+<p align="justify">
+<b>Left: Wet urban intersection, Park Avenue (training episode).</b>
 The ego holds lane centre while navigating toward a signalised intersection with NPC vehicles scattered across lanes. The red-light compliance term rho_t in the safety reward activates when the signal ahead is red. Corridor membership muA is reduced by combined fog and NPC density, tightening the admissible lane deviation window automatically.
 </p>
 
-<p align="center">
-<b>Centre — Multi-lane straight road with active traffic signals (evaluation episode).</b>
+<p align="justify">
+<b>Centre: Multi-lane straight road with active traffic signals (evaluation episode).</b>
 The ego decelerates through a sweeping left turn on a wet road. Curvature-aware target speed scheduling (<code>target_speed - curve_speed_penalty * curv_norm</code>) reduces desired speed proportionally to road curvature. The comfort penalty suppresses oscillatory steering and the route CTE remains within the corridor. The double-yellow centre line and pavement kerb confirm correct lane adherence.
 </p>
 
-<p align="center">
-<b>Right — Left-curve near commercial district, palm-tree boulevard (evaluation episode).</b>
+<p align="justify">
+<b>Right: Left-curve near commercial district, palm-tree boulevard (evaluation episode).</b>
 The ego approaches a cross-road junction with multiple NPC vehicles crossing from the left. The rain-soaked reflective road surface and active cross-traffic exercise the proximity reward psi_P and TTC-based braking inside <code>_policy_passthrough_filter()</code>. Observation noise is elevated here: entity miss rate is approximately 30–40 % at this range under this fog level.
 </p>
 
 ---
 
-## Demo Videos
+## Simulation Videos
 
 Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows the ego Tesla Model 3 completing part of its ~200 m closed-loop route on **Town10HD** under the adversarial night/rain/fog weather. The agent runs fully deterministic inference (`agent.act(obs, deterministic=True)`) with no safety shield active. The spectator camera follows the ego via `_snap_spectator_to_ego()` called every step.
 
 <p align="center">
-  <a href="./video/1.mp4"><img src="./video/1.png" width="30%" alt="Demo 1 — Intersection navigation"/></a>
+  <a href="./video/1.mp4"><img src="./video/1.png" width="30%" alt="01. Intersection navigation"/></a>
   &nbsp;&nbsp;
-  <a href="./video/2.mp4"><img src="./video/2.png" width="30%" alt="Demo 2 — Straight road with traffic signals"/></a>
+  <a href="./video/2.mp4"><img src="./video/2.png" width="30%" alt="02. Straight road with traffic signals"/></a>
   &nbsp;&nbsp;
-  <a href="./video/3.mp4"><img src="./video/3.png" width="30%" alt="Demo 3 — Curve handling, low visibility"/></a>
+  <a href="./video/3.mp4"><img src="./video/3.png" width="30%" alt="03. Curve handling, low visibility"/></a>
 </p>
 
 <p align="center">
@@ -366,11 +366,11 @@ Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows
   <a href="./video/3.mp4"><b>Demo 3 — Curved road, near-zero visibility</b></a>
 </p>
 
-**Demo 1 — Intersection with NPC cross-traffic.** The ego navigates a busy intersection with NPC vehicles crossing from the left. When the traffic light turns red, the agent decelerates well before the stop line — the red-light compliance term rho_t in the safety reward and the TTC-based caution logic inside `_get_min_vehicle_ttc()` both activate. Once the intersection clears, the ego re-accelerates smoothly to target speed (18 km/h) with no overshoot, held in check by the throttle and steer rate limiters (±0.06/step, ±0.08/step).
+**Video 01: Intersection with NPC cross-traffic.** The ego navigates a busy intersection with NPC vehicles crossing from the left. When the traffic light turns red, the agent decelerates well before the stop line — the red-light compliance term rho_t in the safety reward and the TTC-based caution logic inside `_get_min_vehicle_ttc()` both activate. Once the intersection clears, the ego re-accelerates smoothly to target speed (18 km/h) with no overshoot, held in check by the throttle and steer rate limiters (±0.06/step, ±0.08/step).
 
-**Demo 2 — Signalised straight road.** The ego maintains lane centre along a multi-lane straight under active traffic signals and wet-road conditions. The uncertainty gate keeps policy entropy low (high sigma_bar from reduced visibility), producing steady, low-variance throttle and steer outputs. Route CTE stays within the corridor throughout.
+**Video 02: Signalised straight road.** The ego maintains lane centre along a multi-lane straight under active traffic signals and wet-road conditions. The uncertainty gate keeps policy entropy low (high sigma_bar from reduced visibility), producing steady, low-variance throttle and steer outputs. Route CTE stays within the corridor throughout.
 
-**Demo 3 — Curved road, near-zero visibility.** The ego handles a sharp curve under dense fog with near-zero forward visibility. Rising epistemic uncertainty from the critic ensemble suppresses exploration, causing the agent to decelerate and tighten steering gradually rather than commit to an aggressive line — the cautious behaviour predicted by beta(sigma_bar) = beta0 * (1 - sigma_bar).
+**Video 03: Curved road, near-zero visibility.** The ego handles a sharp curve under dense fog with near-zero forward visibility. Rising epistemic uncertainty from the critic ensemble suppresses exploration, causing the agent to decelerate and tighten steering gradually rather than commit to an aggressive line — the cautious behaviour predicted by beta(sigma_bar) = beta0 * (1 - sigma_bar).
 
 ---
 
@@ -382,11 +382,11 @@ Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows
   <img src="./graphs/state_route.png" width="48%" alt="Route Completion Metrics"/>
 </p>
 
-<p align="center">
+<p align="justify">
 <b>Left — Reward Comparison (Sec. 4.3).</b> Average episodic reward on Town10HD. The differentiable multi-objective reward (Eqs. 9–13) reaches 265.3, improving 45.1 % over the nearest baseline RaSc (182.9) and 69.6 % over ST-P3 (156.4), with smoother learning curves due to continuous surrogates replacing sparse event penalties.
 </p>
 
-<p align="center">
+<p align="justify">
 <b>Right — Route Completion Metrics (Sec. 4.2).</b> Off-road percentage (blue, lower is better) and goal completion rate (orange, higher is better) across all methods. The causal relational state cuts off-road from 10.8 % (ST-P3) to 4.1 % — a 62 % reduction — while lifting goal completion to 79.5 %, confirming that uncertainty-weighted attention improves both lane-keeping and navigation success simultaneously.
 </p>
 
@@ -396,11 +396,11 @@ Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows
   <img src="./graphs/uncertainty_metrics.png" width="48%" alt="Uncertainty-Gated Exploration Metrics"/>
 </p>
 
-<p align="center">
+<p align="justify">
 <b>Left — Ego-Relational State Stability (Sec. 4.2).</b> Cross-Track Error (CTE, blue) and heading error (green) on Town10HD. The ego-centric relational graph with uncertainty-weighted attention reduces CTE to 0.65 (28.6 % below ST-P3) and heading error to 0.31 (47.5 % below ST-P3), reflecting tighter lane geometry and ego dynamics fusion in the decision state.
 </p>
 
-<p align="center">
+<p align="justify">
 <b>Right — Uncertainty-Gated Exploration (Sec. 4.4).</b> Exploration variance (blue, lower), collision rate ×100 (red, lower), and stability (green, higher). The joint aleatoric–epistemic entropy gate achieves the lowest variance (0.62) and collision rate (0.60 ×100 = 0.006/km) while reaching the highest stability score (0.91), validating that sigma_bar-driven entropy modulation produces a safer yet not overly conservative policy.
 </p>
 
@@ -652,15 +652,15 @@ export PYTHONPATH=$PYTHONPATH:~/CARLA_0.9.15/PythonAPI/carla/dist/carla-0.9.15-p
 
 `car.py` auto-discovers the CARLA egg by scanning `$CARLA_ROOT`, `~/carla`, `~/CARLA_0.9.15`, and related paths — see `_setup_carla_pythonapi()` for the full search order.
 
-**CARLA server crashes with many NPCs** — Add `--no-rendering`. For headless training this is always recommended.
+**CARLA server crashes with many NPCs:** Add `--no-rendering`. For headless training this is always recommended.
 
-**Town02 route planner warning** — Reduce route length: `--route-target-length 150`. Town02 is a smaller map and 200 m routes may not be reachable from all spawn points.
+**Town02 route planner warning:** Reduce route length: `--route-target-length 150`. Town02 is a smaller map and 200 m routes may not be reachable from all spawn points.
 
-**Alpha collapses during training** — `log_alpha` is clamped to `min=log(0.01)` automatically after every alpha update. If entropy is very low early on, increase `--start-steps` to ensure a well-populated replay buffer before updates begin.
+**Alpha collapses during training:** `log_alpha` is clamped to `min=log(0.01)` automatically after every alpha update. If entropy is very low early on, increase `--start-steps` to ensure a well-populated replay buffer before updates begin.
 
-**Stuck ego during evaluation** — Stuck detection fires after 18 steps below 1 km/h and applies forced throttle 0.42 for 25 steps. If stucks persist, reduce `--npc-max` or increase `--route-target-length`.
+**Stuck ego during evaluation:** Stuck detection fires after 18 steps below 1 km/h and applies forced throttle 0.42 for 25 steps. If stucks persist, reduce `--npc-max` or increase `--route-target-length`.
 
-**Reset fails repeatedly** — `robust_reset()` retries up to 5 times with exponential back-off (2 s to 20 s), rebuilding the environment object if needed. Check that the CARLA server process is still alive.
+**Reset fails repeatedly:** `robust_reset()` retries up to 5 times with exponential back-off (2 s to 20 s), rebuilding the environment object if needed. Check that the CARLA server process is still alive.
 
 ---
 
