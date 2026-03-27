@@ -94,8 +94,8 @@ This section describes how each framework component is concretely implemented in
 Each nearby entity (vehicle, walker, traffic light) is assembled into a 10-dimensional directed edge:
 
 ```
-[rel_x, rel_y]         normalised ego-frame position  (/ entity_max_dist=60 m)
-[rel_vx, rel_vy]       normalised relative velocity   (/ 15 m/s, 10 m/s)
+[rel_x, rel_y]         normalized ego-frame position  (/ entity_max_dist=60 m)
+[rel_vx, rel_vy]       normalized relative velocity   (/ 15 m/s, 10 m/s)
 [sem_v, sem_w, sem_tl] one-hot semantic class
 [curvature, heading]   local lane geometry kappa_i
 [sigma2]               per-entity aleatoric variance
@@ -109,7 +109,7 @@ pos_std   = 0.35 * (0.45 + 0.80*dist_norm + 0.90*fog_norm)
 vel_std   = 0.45 * (0.35 + 0.75*dist_norm + 0.80*fog_norm)
 ```
 
-At 60 m in dense fog, entity miss rate reaches ~52 % and position noise reaches ±0.8 m.
+At 60 m in dense fog, entity miss rate reaches ~52% and position noise reaches ±0.8 m.
 
 `GraphAttention` computes uncertainty-weighted attention in a single differentiable pass. Distant AND uncertain actors receive lower weight simultaneously:
 
@@ -196,7 +196,7 @@ Decision-time uncertainty is decomposed across aleatoric and epistemic component
 ```python
 sigma_epi = Var_k[Q_k(s, a)]             # disagreement across 5 critics
 sigma_dec = sigma_ale + sigma_epi
-sigma_bar = calibrator(sigma_dec)         # normalised to [0, 1]
+sigma_bar = calibrator(sigma_dec)         # normalized to [0, 1]
 ```
 
 `UncertaintyCalibrator` fits a robust scaler every `calibrate_every_steps=10,000` steps on replay samples, using the 5th–95th percentile range and the MAD-based scale, then maps via sigmoid:
@@ -688,5 +688,5 @@ export PYTHONPATH=$PYTHONPATH:~/CARLA_0.9.15/PythonAPI/carla/dist/carla-0.9.15-p
 ## Acknowledgements
 
 <p align="justify">
-This work was supported in part by the National Natural Science Foundation of China (NSFC) under Grants 62473264, 62203134, 62502322, 62372307, and U2001207; in part by the National Natural Science Funds for Distinguished Young Scholar under Grant 62325307; in part by the Natural Science Foundation of Guangdong Province under Grants 2023B1515120038 and 2024A1515011691; in part by the Shenzhen Science and Technology Innovation Commission / Shenzhen Science and Technology Program / Shenzhen Science and Technology Foundation under Grants KCXFZ20230731094001003, RCYX20231211090129039, JCYJ20230808105906014; in part by the Key Research and Development Program in Xinjiang Uygur Autonomous Region under Grant 2025B04019-001; in part by the Guangdong Provincial Key Lab of Integrated Communication, Sensing and Computation for Ubiquitous Internet of Things under Grant 2023B1212010007; and in part by the Project of DEGP under Grant 2023KCXTD042. This work was also supported by the Intelligent Computing Center of Shenzhen University. 
+This work was supported in part by the National Natural Science Foundation of China (NSFC) under Grants 62473264, 62203134, 62502322, 62372307, and U2001207; in part by the National Natural Science Funds for Distinguished Young Scholars under Grant 62325307; in part by the Natural Science Foundation of Guangdong Province under Grants 2023B1515120038 and 2024A1515011691; in part by the Shenzhen Science and Technology Innovation Commission / Shenzhen Science and Technology Program / Shenzhen Science and Technology Foundation under Grants KCXFZ20230731094001003, RCYX20231211090129039, JCYJ20230808105906014; in part by the Key Research and Development Program in Xinjiang Uygur Autonomous Region under Grant 2025B04019-001; in part by the Guangdong Provincial Key Lab of Integrated Communication, Sensing and Computation for Ubiquitous Internet of Things under Grant 2023B1212010007; and in part by the Project of DEGP under Grant 2023KCXTD042. This work was also supported by the Intelligent Computing Center of Shenzhen University. 
 </p>
