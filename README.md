@@ -32,7 +32,9 @@ The framework addresses four tightly coupled challenges in closed-loop autonomou
   <img src="./diagrams/unified_framework.png" width="90%" alt="Unified Framework"/>
 </p>
 
+<p align="justify">
 The unified framework integrates ego-centric relational state construction, dense multi-objective reward shaping, uncertainty-gated SAC exploration, and causal-semantic transfer learning, all sharing a single control-layer uncertainty interface (sigma-bar).
+</p>
 
 ---
 
@@ -42,8 +44,9 @@ The unified framework integrates ego-centric relational state construction, dens
   <img src="./close_loop.png" width="55%" alt="Closed-Loop Route Coverage Map"/>
 </p>
 
+<p align="justify">
 Closed-loop trajectory coverage on Town10HD (source domain). Blue trajectories indicate successful runs; red indicates unsuccessful. Dashed lines show planned routes.
-
+</p>
 ---
 
 ## Key Results
@@ -314,13 +317,17 @@ Two selectable action post-processors sit between the raw RL action and CARLA `a
 | Default | `_policy_passthrough_filter()` | 80% policy / 20% guidance nominal | Yes |
 | Safety shield | `_safety_filter()` | Hard overrides in critical states | Evaluation only |
 
+<p align="justify">
 The passthrough filter blends in a rule-based guidance controller that increases its weight under large CTE (up to 70 %) or wrong-lane detection. Stuck detection fires after 18 steps below 1 km/h and applies forced throttle 0.42 for 25 steps. Rate limiting on all three action dimensions (±0.06 throttle, ±0.08 brake, ±0.08 steer) prevents actuator chattering that would inflate the comfort penalty.
+</p>
 
 ---
 
 ## Simulation Screenshots
 
+<p align="justify">
 Screenshots captured live from the **CarlaUE4** spectator camera during training and evaluation on **Town10HD**, the source training domain. The adversarial weather regime is active in all three: heavy rain, dense fog, and nighttime lighting (cloudiness 90 %, precipitation 90 %, fog density 40 %, sun altitude −25°). The ego vehicle is the red Tesla Model 3. NPC traffic ranges from 8 to 20 per episode during training and 8 to 15 during evaluation. The spectator camera follows the ego 8 m behind at 4 m elevation with −15° pitch, updated every `env.step()` via `_snap_spectator_to_ego()`.
+</p>
 
 <p align="center">
   <img src="./screenshot/1.png" width="32%" alt="Wet urban intersection at night"/>
@@ -349,7 +356,9 @@ The ego approaches a cross-road junction with multiple NPC vehicles crossing fro
 
 ## Simulation Videos
 
+<p align="justify">
 Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows the ego Tesla Model 3 completing part of its ~200 m closed-loop route on **Town10HD** under the adversarial night/rain/fog weather. The agent runs fully deterministic inference (`agent.act(obs, deterministic=True)`) with no safety shield active. The spectator camera follows the ego via `_snap_spectator_to_ego()` called every step.
+</p>
 
 <p align="center">
   <a href="./video/1.mp4"><img src="./video/1.png" width="30%" alt="01. Intersection navigation"/></a>
@@ -367,42 +376,47 @@ Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows
   <a href="./video/3.mp4"><b>Demo 3 — Curved road, near-zero visibility</b></a>
 </p>
 
+<p align="justify">
 **Video 01: Intersection with NPC cross-traffic.** The ego navigates a busy intersection with NPC vehicles crossing from the left. When the traffic light turns red, the agent decelerates well before the stop line — the red-light compliance term rho_t in the safety reward and the TTC-based caution logic inside `_get_min_vehicle_ttc()` both activate. Once the intersection clears, the ego re-accelerates smoothly to target speed (18 km/h) with no overshoot, held in check by the throttle and steer rate limiters (±0.06/step, ±0.08/step).
+</p>
 
+<p align="justify">
 **Video 02: Signalised straight road.** The ego maintains lane centre along a multi-lane straight under active traffic signals and wet-road conditions. The uncertainty gate keeps policy entropy low (high sigma_bar from reduced visibility), producing steady, low-variance throttle and steer outputs. Route CTE stays within the corridor throughout.
+</p>
 
+<p align="justify">
 **Video 03: Curved road, near-zero visibility.** The ego handles a sharp curve under dense fog with near-zero forward visibility. Rising epistemic uncertainty from the critic ensemble suppresses exploration, causing the agent to decelerate and tighten steering gradually rather than commit to an aggressive line — the cautious behaviour predicted by beta(sigma_bar) = beta0 * (1 - sigma_bar).
-
+</p>
 ---
 
 ## Graphs and Visual Results
 
 <p align="center">
-  <img src="./graphs/reward_comparison.png" width="48%" alt="Reward Comparison"/>
+  <img src="./graphs/state_stability.png" width="48%" alt="State Stability — CTE and Heading Error"/>
   &nbsp;
   <img src="./graphs/state_route.png" width="48%" alt="Route Completion Metrics"/>
 </p>
 
 <p align="justify">
-<b>Left — Reward Comparison (Sec. 4.3).</b> Average episodic reward on Town10HD. The differentiable multi-objective reward (Eqs. 9–13) reaches 265.3, improving 45.1 % over the nearest baseline RaSc (182.9) and 69.6 % over ST-P3 (156.4), with smoother learning curves due to continuous surrogates replacing sparse event penalties.
+<b>Left: Ego-Relational State Stability (Sec. 4.2).</b> Cross-Track Error (CTE, blue) and heading error (green) on Town10HD. The ego-centric relational graph with uncertainty-weighted attention reduces CTE to 0.65 (28.6 % below ST-P3) and heading error to 0.31 (47.5 % below ST-P3), reflecting tighter lane geometry and ego dynamics fusion in the decision state.
 </p>
 
 <p align="justify">
-<b>Right — Route Completion Metrics (Sec. 4.2).</b> Off-road percentage (blue, lower is better) and goal completion rate (orange, higher is better) across all methods. The causal relational state cuts off-road from 10.8 % (ST-P3) to 4.1 % — a 62 % reduction — while lifting goal completion to 79.5 %, confirming that uncertainty-weighted attention improves both lane-keeping and navigation success simultaneously.
+<b>Right: Route Completion Metrics (Sec. 4.2).</b> Off-road percentage (blue, lower is better) and goal completion rate (orange, higher is better) across all methods. The causal relational state cuts off-road from 10.8 % (ST-P3) to 4.1 % — a 62 % reduction — while lifting goal completion to 79.5 %, confirming that uncertainty-weighted attention improves both lane-keeping and navigation success simultaneously.
 </p>
 
 <p align="center">
-  <img src="./graphs/state_stability.png" width="48%" alt="State Stability — CTE and Heading Error"/>
+  <img src="./graphs/reward_comparison.png" width="48%" alt="Reward Comparison"/>
   &nbsp;
   <img src="./graphs/uncertainty_metrics.png" width="48%" alt="Uncertainty-Gated Exploration Metrics"/>
 </p>
 
 <p align="justify">
-<b>Left — Ego-Relational State Stability (Sec. 4.2).</b> Cross-Track Error (CTE, blue) and heading error (green) on Town10HD. The ego-centric relational graph with uncertainty-weighted attention reduces CTE to 0.65 (28.6 % below ST-P3) and heading error to 0.31 (47.5 % below ST-P3), reflecting tighter lane geometry and ego dynamics fusion in the decision state.
+<b>Left: Reward Comparison (Sec. 4.3).</b> Average episodic reward on Town10HD. The differentiable multi-objective reward (Eqs. 9–13) reaches 265.3, improving 45.1 % over the nearest baseline RaSc (182.9) and 69.6 % over ST-P3 (156.4), with smoother learning curves due to continuous surrogates replacing sparse event penalties.
 </p>
 
 <p align="justify">
-<b>Right — Uncertainty-Gated Exploration (Sec. 4.4).</b> Exploration variance (blue, lower), collision rate ×100 (red, lower), and stability (green, higher). The joint aleatoric–epistemic entropy gate achieves the lowest variance (0.62) and collision rate (0.60 ×100 = 0.006/km) while reaching the highest stability score (0.91), validating that sigma_bar-driven entropy modulation produces a safer yet not overly conservative policy.
+<b>Right: Uncertainty-Gated Exploration (Sec. 4.4).</b> Exploration variance (blue, lower), collision rate ×100 (red, lower), and stability (green, higher). The joint aleatoric–epistemic entropy gate achieves the lowest variance (0.62) and collision rate (0.60 ×100 = 0.006/km) while reaching the highest stability score (0.91), validating that sigma_bar-driven entropy modulation produces a safer yet not overly conservative policy.
 </p>
 
 ---
@@ -671,4 +685,6 @@ export PYTHONPATH=$PYTHONPATH:~/CARLA_0.9.15/PythonAPI/carla/dist/carla-0.9.15-p
 
 ## Acknowledgements
 
+<p align="justify">
 This work was supported in part by the National Natural Science Foundation of China under Grants 62473264, 62203134, and 62502322; in part by the National Natural Science Funds for Distinguished Young Scholars under Grant 62325307; in part by the Natural Science Foundation of Guangdong Province under Grant 2023B1515120038; and in part by the Shenzhen Science and Technology Innovation Commission under Grant KCXFZ20230731094001003. It was also supported by the Intelligent Computing Center of Shenzhen University.
+</p>
