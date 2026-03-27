@@ -15,7 +15,7 @@
 ## Overview
 
 <p align="justify">
-This repository contains the official implementation of a unified Deep Reinforcement Learning (DRL) framework for <b>safety-aware end-to-end autonomous driving with reliable policy transfer</b>b> in <b>CARLA 0.9.15</b>b>. The entire system (environment, neural networks, SAC agent, training loops, and evaluation) is implemented in a single self-contained file `car.py` (~4,600 lines).
+This repository contains the official implementation of a unified Deep Reinforcement Learning (DRL) framework for <b>safety-aware end-to-end autonomous driving with reliable policy transfer</b> in <b>CARLA 0.9.15</b>. The entire system (environment, neural networks, SAC agent, training loops, and evaluation) is implemented in a single self-contained file `car.py` (~4,600 lines).
 </p>
 
 The framework addresses four tightly coupled challenges in closed-loop autonomous driving:
@@ -534,7 +534,7 @@ python3 -u car.py \
 ## Simulation Images
 
 <p align="justify">
-Screenshots captured live from the <b>CarlaUE4</b>b> spectator camera during training and evaluation on <b>Town10HD</b>b>, the source training domain. The adversarial weather regime is active in all three: heavy rain, dense fog, and nighttime lighting (cloudiness 90 %, precipitation 90 %, fog density 40 %, sun altitude −25°). The ego vehicle is the red Tesla Model 3. NPC traffic ranges from 8 to 20 per episode during training and 8 to 15 during evaluation. The spectator camera follows the ego 8 m behind at 4 m elevation with −15° pitch, updated every `env.step()` via `_snap_spectator_to_ego()`.
+Screenshots captured live from the <b>CarlaUE4</b> spectator camera during training and evaluation on <b>Town10HD</b>, the source training domain. The adversarial weather regime is active in all three: heavy rain, dense fog, and nighttime lighting (cloudiness 90 %, precipitation 90 %, fog density 40 %, sun altitude −25°). The ego vehicle is the red Tesla Model 3. NPC traffic ranges from 8 to 20 per episode during training and 8 to 15 during evaluation. The spectator camera follows the ego 8 m behind at 4 m elevation with −15° pitch, updated every `env.step()` via `_snap_spectator_to_ego()`.
 </p>
 
 <p align="center">
@@ -565,7 +565,7 @@ The ego approaches a cross-road junction with multiple NPC vehicles crossing fro
 ## Simulation Videos
 
 <p align="justify">
-Recorded during closed-loop <b>evaluation</b>b> runs in CARLA 0.9.15. Each clip shows the ego Tesla Model 3 completing part of its ~200 m closed-loop route on <b>Town10HD<b> under the adversarial night/rain/fog weather. The agent runs fully deterministic inference (`agent.act(obs, deterministic=True)`) with no safety shield active. The spectator camera follows the ego via `_snap_spectator_to_ego()` called every step.
+Recorded during closed-loop <b>evaluation</b> runs in CARLA 0.9.15. Each clip shows the ego Tesla Model 3 completing part of its ~200 m closed-loop route on <b>Town10HD<b> under the adversarial night/rain/fog weather. The agent runs fully deterministic inference (`agent.act(obs, deterministic=True)`) with no safety shield active. The spectator camera follows the ego via `_snap_spectator_to_ego()` called every step.
 </p>
 
 <p align="center">
