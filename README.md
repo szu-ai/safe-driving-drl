@@ -324,7 +324,7 @@ The passthrough filter blends in a rule-based guidance controller that increases
 
 ---
 
-## Simulation Screenshots
+## Simulation Images
 
 <p align="justify">
 Screenshots captured live from the **CarlaUE4** spectator camera during training and evaluation on **Town10HD**, the source training domain. The adversarial weather regime is active in all three: heavy rain, dense fog, and nighttime lighting (cloudiness 90 %, precipitation 90 %, fog density 40 %, sun altitude −25°). The ego vehicle is the red Tesla Model 3. NPC traffic ranges from 8 to 20 per episode during training and 8 to 15 during evaluation. The spectator camera follows the ego 8 m behind at 4 m elevation with −15° pitch, updated every `env.step()` via `_snap_spectator_to_ego()`.
@@ -370,24 +370,25 @@ Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows
 </p>
 
 <p align="center">
-  <a href="./video/1.mp4"><b>Demo 1 — Intersection with NPC cross-traffic</b></a>
+  <a href="./video/1.mp4"><b>01. Intersection navigation</b></a>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="./video/2.mp4"><b>Demo 2 — Signalised straight road</b></a>
+  <a href="./video/2.mp4"><b>02. Straight road with traffic signals</b></a>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="./video/3.mp4"><b>Demo 3 — Curved road, near-zero visibility</b></a>
+  <a href="./video/3.mp4"><b>03. Curve handling, low visibility</b></a>
 </p>
 
 <p align="justify">
-**Video 01: Intersection with NPC cross-traffic.** The ego navigates a busy intersection with NPC vehicles crossing from the left. When the traffic light turns red, the agent decelerates well before the stop line — the red-light compliance term rho_t in the safety reward and the TTC-based caution logic inside `_get_min_vehicle_ttc()` both activate. Once the intersection clears, the ego re-accelerates smoothly to target speed (18 km/h) with no overshoot, held in check by the throttle and steer rate limiters (±0.06/step, ±0.08/step).
+<b>Video 01: Intersection with NPC cross-traffic.</b> The ego navigates a busy intersection with NPC vehicles crossing from the left. When the traffic light turns red, the agent decelerates well before the stop line — the red-light compliance term rho_t in the safety reward and the TTC-based caution logic inside `_get_min_vehicle_ttc()` both activate. Once the intersection clears, the ego re-accelerates smoothly to target speed (18 km/h) with no overshoot, held in check by the throttle and steer rate limiters (±0.06/step, ±0.08/step).
 </p>
 
 <p align="justify">
-**Video 02: Signalised straight road.** The ego maintains lane centre along a multi-lane straight under active traffic signals and wet-road conditions. The uncertainty gate keeps policy entropy low (high sigma_bar from reduced visibility), producing steady, low-variance throttle and steer outputs. Route CTE stays within the corridor throughout.
+<b>Video 02: Signalised straight road.</b> The ego maintains lane centre along a multi-lane straight under active traffic signals and wet-road conditions. The uncertainty gate keeps policy entropy low (high sigma_bar from reduced visibility), producing steady, low-variance throttle and steer outputs. Route CTE stays within the corridor throughout.
 </p>
 
 <p align="justify">
-**Video 03: Curved road, near-zero visibility.** The ego handles a sharp curve under dense fog with near-zero forward visibility. Rising epistemic uncertainty from the critic ensemble suppresses exploration, causing the agent to decelerate and tighten steering gradually rather than commit to an aggressive line — the cautious behaviour predicted by beta(sigma_bar) = beta0 * (1 - sigma_bar).
+<b>Video 03: Curved road, near-zero visibility.</b> The ego handles a sharp curve under dense fog with near-zero forward visibility. Rising epistemic uncertainty from the critic ensemble suppresses exploration, causing the agent to decelerate and tighten steering gradually rather than commit to an aggressive line — the cautious behaviour predicted by beta(sigma_bar) = beta0 * (1 - sigma_bar).
 </p>
+
 ---
 
 ## Graphs and Visual Results
