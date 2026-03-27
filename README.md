@@ -39,35 +39,6 @@ The unified framework integrates ego-centric relational state construction, dens
 
 ---
 
-## Closed-Loop Route Coverage
-
-<p align="center">
-  <img src="./close_loop.png" width="55%" alt="Closed-Loop Route Coverage Map"/>
-</p>
-
-<p align="justify">
-Closed-loop trajectory coverage on Town10HD (source domain). Blue trajectories indicate successful runs; red indicates unsuccessful. Dashed lines show planned routes.
-</p>
-
----
-
-## Key Results
-
-Closed-loop evaluation in CARLA 0.9.15 across Town10HD (source), Town02, and Town05 (targets) under adverse weather.
-
-| Map / Setting | SR (%) | RC (%) | DS | IS | Coll./km | Off/km | TO/km |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Town10HD (source training) | 91.2 | 94.1 | 94.1 | 1.00 | 0.000 | 0.000 | 0.000 |
-| Town05 (zero-shot transfer) | 100.0 | 94.6 | 94.6 | 1.00 | 0.000 | 0.000 | 0.000 |
-| Town02, Policy Learning | 72.1 | 75.2 | 188.6 | 0.88 | 0.007 | 0.005 | 0.003 |
-| Town02, Source Domain | 80.3 | 82.6 | 205.7 | 0.92 | 0.006 | 0.004 | 0.002 |
-| Town02, **Target (full transfer)** | **85.0** | **84.1** | **214.3** | **0.94** | **0.005** | **0.003** | **0.001** |
-
-**SR** = Success Rate, **RC** = Route Completion, **DS** = Driving Score, **IS** = Infraction Score.  
-Town05 zero-shot: CTE = 0.192 m, heading error = 0.021 rad. Town10HD source: reward 265.3, CTE 0.65.
-
----
-
 ## Architecture
 
 ```text
@@ -656,6 +627,35 @@ Recorded during closed-loop **evaluation** runs in CARLA 0.9.15. Each clip shows
 <p align="justify">
 <b>Right: Uncertainty-Gated Exploration (Sec. 4.4).</b> Exploration variance (blue, lower), collision rate ×100 (red, lower), and stability (green, higher). The joint aleatoric–epistemic entropy gate achieves the lowest variance (0.62) and collision rate (0.60 ×100 = 0.006/km) while reaching the highest stability score (0.91), validating that sigma_bar-driven entropy modulation produces a safer yet not overly conservative policy.
 </p>
+
+---
+
+## Closed-Loop Route Coverage
+
+<p align="center">
+  <img src="./close_loop.png" width="55%" alt="Closed-Loop Route Coverage Map"/>
+</p>
+
+<p align="justify">
+Closed-loop trajectory coverage on Town10HD (source domain). Blue trajectories indicate successful runs; red indicates unsuccessful. Dashed lines show planned routes.
+</p>
+
+---
+
+## Key Results
+
+Closed-loop evaluation in CARLA 0.9.15 across Town10HD (source), Town02, and Town05 (targets) under adverse weather.
+
+| Map / Setting | SR (%) | RC (%) | DS | IS | Coll./km | Off/km | TO/km |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Town10HD (source training) | 91.2 | 94.1 | 94.1 | 1.00 | 0.000 | 0.000 | 0.000 |
+| Town05 (zero-shot transfer) | 100.0 | 94.6 | 94.6 | 1.00 | 0.000 | 0.000 | 0.000 |
+| Town02, Policy Learning | 72.1 | 75.2 | 188.6 | 0.88 | 0.007 | 0.005 | 0.003 |
+| Town02, Source Domain | 80.3 | 82.6 | 205.7 | 0.92 | 0.006 | 0.004 | 0.002 |
+| Town02, **Target (full transfer)** | **85.0** | **84.1** | **214.3** | **0.94** | **0.005** | **0.003** | **0.001** |
+
+**SR** = Success Rate, **RC** = Route Completion, **DS** = Driving Score, **IS** = Infraction Score.  
+Town05 zero-shot: CTE = 0.192 m, heading error = 0.021 rad. Town10HD source: reward 265.3, CTE 0.65.
 
 ---
 
