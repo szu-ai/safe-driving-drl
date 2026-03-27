@@ -15,7 +15,7 @@
 ## Overview
 
 <p align="justify">
-This repository contains the official implementation of a unified Deep Reinforcement Learning (DRL) framework for <b>safety-aware end-to-end autonomous driving with reliable policy transfer</b>b> in <b>CARLA 0.9.15<b>. The entire system (environment, neural networks, SAC agent, training loops, and evaluation) is implemented in a single self-contained file `car.py` (~4,600 lines).
+This repository contains the official implementation of a unified Deep Reinforcement Learning (DRL) framework for <b>safety-aware end-to-end autonomous driving with reliable policy transfer</b>b> in <b>CARLA 0.9.15</b>b>. The entire system (environment, neural networks, SAC agent, training loops, and evaluation) is implemented in a single self-contained file `car.py` (~4,600 lines).
 </p>
 
 The framework addresses four tightly coupled challenges in closed-loop autonomous driving:
