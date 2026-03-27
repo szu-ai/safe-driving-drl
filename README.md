@@ -19,9 +19,9 @@ This repository contains the official implementation of a unified Deep Reinforce
 </p>
 
 The framework addresses four tightly coupled challenges in closed-loop autonomous driving:
-1. **Ego-centric relational state:** An uncertainty-weighted attention graph captures causal interactions between the ego vehicle and nearby agents, making safety-critical influences explicit to the policy.
-2. **Differentiable multi-objective reward shaping:** Dense reward terms jointly optimize safety, progress, comfort, and uncertainty-aware behavior, avoiding unstable sparse event-only penalties.
-3. **Uncertainty-gated exploration:** Aleatoric and epistemic uncertainty are combined into a calibrated confidence signal that adaptively modulates policy entropy for risk-aware exploration.
+1. <b>Ego-centric relational state:</b> An uncertainty-weighted attention graph captures causal interactions between the ego vehicle and nearby agents, making safety-critical influences explicit to the policy.
+2. <b>Differentiable multi-objective reward shaping:</b> Dense reward terms jointly optimize safety, progress, comfort, and uncertainty-aware behavior, avoiding unstable sparse event-only penalties.
+3. <b>Uncertainty-gated exploration:</b> Aleatoric and epistemic uncertainty are combined into a calibrated confidence signal that adaptively modulates policy entropy for risk-aware exploration.
 4. **Causal-semantic policy transfer:** Transfer learning aligns action distributions, relational attention, and uncertainty statistics across source and target domains, with meta-initialization for fast adaptation.
 
 ---
