@@ -290,7 +290,7 @@ Two selectable action post-processors sit between the raw RL action and CARLA `a
 | Safety shield | `_safety_filter()` | Hard overrides in critical states | Evaluation only |
 
 <p align="justify">
-The passthrough filter blends in a rule-based guidance controller that increases its weight under large CTE (up to 70 %) or wrong-lane detection. Stuck detection fires after 18 steps below 1 km/h and applies forced throttle 0.42 for 25 steps. Rate limiting on all three action dimensions (±0.06 throttle, ±0.08 brake, ±0.08 steer) prevents actuator chattering that would inflate the comfort penalty.
+The passthrough filter blends in a rule-based guidance controller that increases its weight under large CTE (up to 70%) or wrong-lane detection. Stuck detection fires after 18 steps below 1 km/h and applies forced throttle 0.42 for 25 steps. Rate limiting on all three action dimensions (±0.06 throttle, ±0.08 brake, ±0.08 steer) prevents actuator chattering that would inflate the comfort penalty.
 </p>
 
 ---
@@ -403,7 +403,7 @@ sleep 15
 
 ### 2. Train the source policy (paper-faithful, 500k steps)
 
-Uses random spawn (`--spawn-index -1`) to prevent overfitting. Fixed spawn causes 97 % collision rate as the policy overfits to a single road segment and deterministically hits the same NPC after alpha collapses.
+Uses random spawn (`--spawn-index -1`) to prevent overfitting. Fixed spawn causes 97% collision rate as the policy overfits to a single road segment and deterministically hits the same NPC after alpha collapses.
 
 ```bash
 python3 -u car.py \
@@ -533,7 +533,7 @@ python3 -u car.py \
 ## Simulation Images
 
 <p align="justify">
-Screenshots captured live from the <b>CarlaUE4</b> spectator camera during training and evaluation on <b>Town10HD</b>, the source training domain. The adversarial weather regime is active in all three: heavy rain, dense fog, and nighttime lighting (cloudiness 90 %, precipitation 90 %, fog density 40 %, sun altitude −25°). The ego vehicle is the red Tesla Model 3. NPC traffic ranges from 8 to 20 per episode during training and 8 to 15 during evaluation. The spectator camera follows the ego 8 m behind at 4 m elevation with −15° pitch, updated every `env.step()` via `_snap_spectator_to_ego()`.
+Screenshots captured live from the <b>CarlaUE4</b> spectator camera during training and evaluation on <b>Town10HD</b>, the source training domain. The adversarial weather regime is active in all three: heavy rain, dense fog, and nighttime lighting (cloudiness 90%, precipitation 90%, fog density 40%, sun altitude −25°). The ego vehicle is the red Tesla Model 3. NPC traffic ranges from 8 to 20 per episode during training and 8 to 15 during evaluation. The spectator camera follows the ego 8 m behind at 4 m elevation with −15° pitch, updated every `env.step()` via `_snap_spectator_to_ego()`.
 </p>
 
 <p align="center">
@@ -556,7 +556,7 @@ The ego decelerates through a sweeping left turn on a wet road. Curvature-aware 
 
 <p align="justify">
 <b>Right: Left-curve near commercial district, palm-tree boulevard (evaluation episode).</b>
-The ego approaches a cross-road junction with multiple NPC vehicles crossing from the left. The rain-soaked reflective road surface and active cross-traffic exercise the proximity reward psi_P and TTC-based braking inside <code>_policy_passthrough_filter()</code>. Observation noise is elevated here: entity miss rate is approximately 30–40 % at this range under this fog level.
+The ego approaches a cross-road junction with multiple NPC vehicles crossing from the left. The rain-soaked reflective road surface and active cross-traffic exercise the proximity reward psi_P and TTC-based braking inside <code>_policy_passthrough_filter()</code>. Observation noise is elevated here: entity miss rate is approximately 30–40% at this range under this fog level.
 </p>
 
 ---
@@ -606,11 +606,11 @@ Recorded during closed-loop <b>evaluation</b> runs in CARLA 0.9.15. Each clip sh
 </p>
 
 <p align="justify">
-<b>Left: Ego-Relational State Stability (Sec. 4.2).</b> Cross-Track Error (CTE, blue) and heading error (green) on Town10HD. The ego-centric relational graph with uncertainty-weighted attention reduces CTE to 0.65 (28.6 % below ST-P3) and heading error to 0.31 (47.5 % below ST-P3), reflecting tighter lane geometry and ego dynamics fusion in the decision state.
+<b>Left: Ego-Relational State Stability (Sec. 4.2).</b> Cross-Track Error (CTE, blue) and heading error (green) on Town10HD. The ego-centric relational graph with uncertainty-weighted attention reduces CTE to 0.65 (28.6% below ST-P3) and heading error to 0.31 (47.5% below ST-P3), reflecting tighter lane geometry and ego dynamics fusion in the decision state.
 </p>
 
 <p align="justify">
-<b>Right: Route Completion Metrics (Sec. 4.2).</b> Off-road percentage (blue, lower is better) and goal completion rate (orange, higher is better) across all methods. The causal relational state cuts off-road from 10.8 % (ST-P3) to 4.1 % — a 62 % reduction, while lifting goal completion to 79.5 %, confirming that uncertainty-weighted attention improves both lane-keeping and navigation success simultaneously.
+<b>Right: Route Completion Metrics (Sec. 4.2).</b> Off-road percentage (blue, lower is better) and goal completion rate (orange, higher is better) across all methods. The causal relational state cuts off-road from 10.8% (ST-P3) to 4.1%, a 62% reduction, while lifting goal completion to 79.5%, confirming that uncertainty-weighted attention improves both lane-keeping and navigation success simultaneously.
 </p>
 
 <p align="center">
@@ -620,7 +620,7 @@ Recorded during closed-loop <b>evaluation</b> runs in CARLA 0.9.15. Each clip sh
 </p>
 
 <p align="justify">
-<b>Left: Reward Comparison (Sec. 4.3).</b> Average episodic reward on Town10HD. The differentiable multi-objective reward (Eqs. 9–13) reaches 265.3, improving 45.1 % over the nearest baseline RaSc (182.9) and 69.6 % over ST-P3 (156.4), with smoother learning curves due to continuous surrogates replacing sparse event penalties.
+<b>Left: Reward Comparison (Sec. 4.3).</b> Average episodic reward on Town10HD. The differentiable multi-objective reward (Eqs. 9–13) reaches 265.3, improving 45.1% over the nearest baseline RaSc (182.9) and 69.6% over ST-P3 (156.4), with smoother learning curves due to continuous surrogates replacing sparse event penalties.
 </p>
 
 <p align="justify">
