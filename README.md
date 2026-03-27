@@ -664,16 +664,7 @@ export PYTHONPATH=$PYTHONPATH:~/CARLA_0.9.15/PythonAPI/carla/dist/carla-0.9.15-p
 
 ---
 
-## Citation
 
-```bibtex
-@inproceedings{uddin2026reliable,
-  title     = {Reliable Policy Transfer for Safety-Aware End-to-End Driving with Deep Reinforcement Learning},
-  author    = {Uddin, Md. Borhan and Raza, Arif and Lin, Zhiliang and Wang, Lu and Li, Jianqiang and Chen, Jie},
-  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-  year      = {2026}
-}
-```
 
 ---
 
